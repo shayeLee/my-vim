@@ -3,6 +3,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
 Plug 'tpope/vim-fugitive'
 Plug 'mengelbrecht/lightline-bufferline'
+Plug 'edkolev/tmuxline.vim'
 Plug 'rakr/vim-one'
 Plug 'jacoborus/tender.vim'
 Plug 'arcticicestudio/nord-vim'
@@ -37,6 +38,7 @@ syntax enable
 set background=dark
 colorscheme nord
 let macvim_skip_colorscheme=1
+let g:tmuxline_theme = 'iceberg'
 
 " lightline config
 let g:lightline#bufferline#show_number=2
