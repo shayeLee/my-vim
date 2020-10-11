@@ -1,0 +1,11 @@
+{
+  "coc.preferences.formatOnSaveFiletypes": [
+    "ts",
+    "js",
+    "vue",
+    "scss",
+    "css",
+    "markdown",
+		"go"
+  ]
+}
