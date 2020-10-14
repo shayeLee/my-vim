@@ -1,23 +1,28 @@
 call plug#begin('~/.vim/plugged')
 Plug 'itchyny/lightline.vim'
+Plug 'edkolev/tmuxline.vim'
 Plug 'itchyny/vim-gitbranch'
 Plug 'tpope/vim-fugitive'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'rakr/vim-one'
 Plug 'jacoborus/tender.vim'
 Plug 'arcticicestudio/nord-vim'
+Plug 'yuttie/hydrangea-vim'
 Plug 'preservim/nerdtree'
 Plug 'preservim/nerdcommenter'
 Plug 'frazrepo/vim-rainbow'
 Plug 'neoclide/jsonc.vim'
+Plug 'posva/vim-vue'
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+Plug 'kshenoy/vim-signature'
 call plug#end()
 
 filetype on
 filetype indent on
 filetype plugin on
 filetype plugin indent on
+autocmd FileType vue syntax sync fromstart
 
 if (has("nvim"))
   "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
@@ -34,7 +39,7 @@ if (has("termguicolors"))
 endif
 
 syntax enable
-set background=dark
+" set background=dark
 colorscheme nord
 let macvim_skip_colorscheme=1
 
@@ -46,7 +51,7 @@ let g:lightline = {
   \ 'colorscheme': 'wombat',
   \ 'active': {
   \   'left': [ [ 'mode', 'paste' ],
-  \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+  \             [ 'gitbranch', 'readonly', 'relativepath', 'modified' ] ]
   \ },
   \ 'component_function': {
   \   'gitbranch': 'FugitiveHead'
@@ -63,9 +68,10 @@ let g:lightline = {
   \ }
   \ }
 
+source ~/my-vim/modules/coc.vim
+
 set encoding=utf-8
 set noshowmode
-set hidden
 set laststatus=2
 set showtabline=2
 set ambiwidth=double
@@ -73,27 +79,20 @@ set number
 set relativenumber
 set smartindent
 set tabstop=2
+set shiftwidth=2
 set showcmd
 set foldmethod=manual
 set hlsearch
 exec "nohlsearch"
 set incsearch
 set mouse=
-" set clipboard=unnamed
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 " TextEdit might fail if hidden is not set.
 set hidden
-" Some servers have issues with backup files, see #649.
-set nobackup
-set nowritebackup
-" Give more space for displaying messages.
-set cmdheight=1
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
-set updatetime=300
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
+set updatetime=100
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
 if has("patch-8.1.1564")
@@ -115,7 +114,7 @@ let g:Lf_PreviewInPopup = 1
 let g:Lf_WindowPosition = 'popup'
 nnoremap <LEADER>F :LeaderfFile<CR>
 nnoremap <LEADER>L :LeaderfLine<CR>
-inoremap jj <Esc>
+" inoremap jj <Esc>
 nnoremap bn :bn<CR>
 nnoremap bp :bp<CR>
 nmap <Leader>1 <Plug>lightline#bufferline#go(1)
@@ -147,7 +146,6 @@ inoremap <silent><expr> <TAB>
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
@@ -178,7 +176,6 @@ nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
@@ -257,6 +254,10 @@ nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
 nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols.
 nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" Search workspace buffers
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I buffers<cr>
+" Search buffers marks
+nnoremap <silent><nowait> <space>m  :<C-u>CocList marks<cr>
 " Do default action for next item.
 nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
