@@ -257,7 +257,7 @@ nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols.
 nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " Search workspace buffers
-nnoremap <silent><nowait> <space>s  :<C-u>CocList -I buffers<cr>
+nnoremap <silent><nowait> <space>b  :<C-u>CocList -I buffers<cr>
 " Search buffers marks
 nnoremap <silent><nowait> <space>m  :<C-u>CocList marks<cr>
 " Do default action for next item.
