@@ -1,12 +1,11 @@
 call plug#begin('~/.vim/plugged')
 Plug 'itchyny/lightline.vim'
 Plug 'edkolev/tmuxline.vim'
-Plug 'itchyny/vim-gitbranch'
 Plug 'tpope/vim-fugitive'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'edkolev/tmuxline.vim'
+Plug 'Yggdroot/indentLine'
 Plug 'arcticicestudio/nord-vim'
-Plug 'morhetz/gruvbox'
 Plug 'nightsense/stellarized'
 if has('nvim')
   Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -17,11 +16,9 @@ else
 endif
 Plug 'kristijanhusak/defx-icons'
 Plug 'preservim/nerdcommenter'
-Plug 'frazrepo/vim-rainbow'
 Plug 'neoclide/jsonc.vim'
 Plug 'posva/vim-vue'
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
-Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'kshenoy/vim-signature'
 call plug#end()
 
