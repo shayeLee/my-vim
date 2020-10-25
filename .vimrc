@@ -5,11 +5,17 @@ Plug 'itchyny/vim-gitbranch'
 Plug 'tpope/vim-fugitive'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'edkolev/tmuxline.vim'
-Plug 'rakr/vim-one'
-Plug 'jacoborus/tender.vim'
 Plug 'arcticicestudio/nord-vim'
-Plug 'yuttie/hydrangea-vim'
-Plug 'preservim/nerdtree'
+Plug 'morhetz/gruvbox'
+Plug 'nightsense/stellarized'
+if has('nvim')
+  Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/defx.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+Plug 'kristijanhusak/defx-icons'
 Plug 'preservim/nerdcommenter'
 Plug 'frazrepo/vim-rainbow'
 Plug 'neoclide/jsonc.vim'
@@ -19,9 +25,6 @@ Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'kshenoy/vim-signature'
 call plug#end()
 
-filetype on
-filetype indent on
-filetype plugin on
 filetype plugin indent on
 autocmd FileType vue syntax sync fromstart
 
@@ -37,20 +40,43 @@ if (has("termguicolors"))
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 	set t_Co=256
+	set t_ut=
 endif
-
 syntax enable
-" set background=dark
-colorscheme nord
+set background=dark
+colorscheme stellarized
 let macvim_skip_colorscheme=1
 let g:tmuxline_theme = 'iceberg'
+
+call defx#custom#option('_', {
+  \ 'winwidth': 30,
+  \ 'split': 'vertical',
+  \ 'direction': 'botright',
+  \ 'show_ignored_files': 0,
+  \ 'buffer_name': '',
+  \ 'toggle': 1,
+  \ 'resume': 1
+  \ })
+autocmd FileType defx call s:defx_mappings()
+function! s:defx_mappings() abort
+  nnoremap <silent><buffer><expr> l     <SID>defx_toggle_tree()
+  nnoremap <silent><buffer><expr> .     defx#do_action('toggle_ignored_files')
+  nnoremap <silent><buffer><expr> <C-r>  defx#do_action('redraw')
+endfunction
+function! s:defx_toggle_tree() abort
+    " Open current file, or toggle directory expand/collapse
+    if defx#is_directory()
+        return defx#do_action('open_or_close_tree')
+    endif
+    return defx#do_action('multi', ['drop'])
+endfunction
 
 " lightline config
 let g:lightline#bufferline#show_number=2
 let g:lightline#bufferline#smart_path=1
 let g:lightline#bufferline#shorten_path=0
 let g:lightline = {
-  \ 'colorscheme': 'wombat',
+  \ 'colorscheme': 'stellarized_dark',
   \ 'active': {
   \   'left': [ [ 'mode', 'paste' ],
   \             [ 'gitbranch', 'readonly', 'relativepath', 'modified' ] ]
@@ -72,6 +98,7 @@ let g:lightline = {
 
 source ~/my-vim/modules/coc.vim
 
+set ruler
 set encoding=utf-8
 set noshowmode
 set laststatus=2
@@ -85,9 +112,8 @@ set shiftwidth=2
 set showcmd
 set foldmethod=manual
 set hlsearch
-exec "nohlsearch"
 set incsearch
-set mouse=
+set mouse=a
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 " TextEdit might fail if hidden is not set.
@@ -104,14 +130,17 @@ else
   set signcolumn=yes
 endif
 
-map <C-n> :NERDTreeToggle<CR>
+inoremap [ []<ESC>i
+inoremap { {}<ESC>i
+inoremap < <><ESC>i
+nmap <silent><space>e :Defx<CR>
 map <Up> :res +5<CR>
 map <Down> :res -5<CR>
 map <Left> :vertical resize-5<CR>
 map <Right> :vertical resize+5<CR>
-nnoremap <LEADER><Right> :set splitright<CR>:vsplit<CR> 
+nnoremap <LEADER><Right> :set splitright<CR>:vsplit<CR>
 nnoremap <LEADER><Down> :set splitbelow<CR>:split<CR>
-nnoremap <LEADER><CR> :nohlsearch<CR>
+nmap <ESC> :nohlsearch<CR>
 let g:Lf_PreviewInPopup = 1
 let g:Lf_WindowPosition = 'popup'
 nnoremap <LEADER>F :LeaderfFile<CR>
@@ -248,8 +277,6 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 nnoremap <leader>coc :CocList<CR>
 " Show all diagnostics.
 nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions.
-nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
 " Show commands.
 nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
 " Find symbol of current document.
@@ -257,9 +284,15 @@ nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols.
 nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " Search workspace buffers
-nnoremap <silent><nowait> <space>b  :<C-u>CocList -I buffers<cr>
+nnoremap <silent><nowait> <space>b  :<C-u>CocList buffers<cr>
 " Search buffers marks
 nnoremap <silent><nowait> <space>m  :<C-u>CocList marks<cr>
+" mru
+nnoremap <silent><nowait> <space>r  :<C-u>CocList mru<cr>
+" Search files
+nnoremap <silent><nowait> <space>f  :<C-u>CocList files<cr>
+" Search lines
+nnoremap <silent><nowait> <space>l  :<C-u>CocList lines<cr>
 " Do default action for next item.
 nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
@@ -286,3 +319,7 @@ imap <C-j> <Plug>(coc-snippets-expand-jump)
 xmap <leader>x  <Plug>(coc-convert-snippet)
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+
+
+
