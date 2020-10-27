@@ -2,6 +2,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'itchyny/lightline.vim'
 Plug 'edkolev/tmuxline.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'edkolev/tmuxline.vim'
 Plug 'Yggdroot/indentLine'
@@ -14,6 +15,7 @@ else
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
+Plug 'ryanoasis/vim-devicons'
 Plug 'kristijanhusak/defx-icons'
 Plug 'preservim/nerdcommenter'
 Plug 'neoclide/jsonc.vim'
@@ -46,9 +48,9 @@ let macvim_skip_colorscheme=1
 let g:tmuxline_theme = 'iceberg'
 
 call defx#custom#option('_', {
-  \ 'winwidth': 30,
+  \ 'winwidth': 35,
   \ 'split': 'vertical',
-  \ 'direction': 'botright',
+  \ 'direction': 'topleft',
   \ 'show_ignored_files': 0,
   \ 'buffer_name': '',
   \ 'toggle': 1,
@@ -56,8 +58,9 @@ call defx#custom#option('_', {
   \ })
 autocmd FileType defx call s:defx_mappings()
 function! s:defx_mappings() abort
-  nnoremap <silent><buffer><expr> l     <SID>defx_toggle_tree()
-  nnoremap <silent><buffer><expr> .     defx#do_action('toggle_ignored_files')
+  nnoremap <silent><buffer><expr> l      <SID>defx_toggle_tree()
+	nnoremap <silent><buffer><expr> P      defx#do_action('preview')
+  nnoremap <silent><buffer><expr> .      defx#do_action('toggle_ignored_files')
   nnoremap <silent><buffer><expr> <C-r>  defx#do_action('redraw')
 endfunction
 function! s:defx_toggle_tree() abort
@@ -95,7 +98,6 @@ let g:lightline = {
 
 source ~/my-vim/modules/coc.vim
 
-set ruler
 set encoding=utf-8
 set noshowmode
 set laststatus=2
@@ -138,11 +140,6 @@ map <Right> :vertical resize+5<CR>
 nnoremap <LEADER><Right> :set splitright<CR>:vsplit<CR>
 nnoremap <LEADER><Down> :set splitbelow<CR>:split<CR>
 nmap <ESC> :nohlsearch<CR>
-let g:Lf_PreviewInPopup = 1
-let g:Lf_WindowPosition = 'popup'
-nnoremap <LEADER>F :LeaderfFile<CR>
-nnoremap <LEADER>L :LeaderfLine<CR>
-" inoremap jj <Esc>
 nnoremap bn :bn<CR>
 nnoremap bp :bp<CR>
 nmap <Leader>1 <Plug>lightline#bufferline#go(1)
